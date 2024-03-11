@@ -1,1 +1,3 @@
-# roche-tf-ansible-gitlab_11thmarch
+### Terraform day 1  tasks
+
+<img src="tasks1.png">
