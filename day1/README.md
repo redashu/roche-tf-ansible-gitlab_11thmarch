@@ -164,4 +164,52 @@ aws_instance.ashu-vm1: Creating...
 aws_instance.ashu-vm1: Still creating... [10s elapsed]
 ```
 
+### apply again 
+
+```
+[ashu@ip-172-31-18-146 ashu-terraform]$ terraform apply --auto-approve 
+aws_instance.ashu-vm1: Refreshing state... [id=i-05359026992894e98]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
+following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_instance.ashu-vm1 will be updated in-place
+  ~ resource "aws_instance" "ashu-vm1" {
+        id                                   = "i-05359026992894e98"
+      ~ tags                                 = {
+          + "name" = "ashutoshh-linuxvm"
+        }
+      ~ tags_all                             = {
+          + "name" = "ashutoshh-linuxvm"
+        }
+        # (31 unchanged attributes hidden)
+
+        # (8 unchanged blocks hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+aws_instance.ashu-vm1: Modifying... [id=i-05359026992894e98]
+aws_instance.ashu-vm1: Modifications complete after 1s [id=i-05359026992894e98]
+╷
+│ Warning: Version constraints inside provider configuration blocks are deprecated
+│ 
+│   on provider.tf line 5, in provider "aws":
+│    5:   version = "5.40.0"
+│ 
+│ Terraform 0.13 and earlier allowed provider version constraints inside the provider configuration block, but that is
+│ now deprecated and will be removed in a future version of Terraform. To silence this warning, move the provider version
+│ constraint into the required_providers block.
+╵
+
+Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+```
+
+### TF lifecycle 
+
+<img src="lf.png">
+
+
 
