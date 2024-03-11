@@ -211,5 +211,61 @@ Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 
 <img src="lf.png">
 
+### Variables in TF 
+
+<img src="var.png">
+
+### terraform work format 
+
+<img src="tfw.png">
+
+## Terrform resoruces 
+
+### create key pair method 1 
+
+```
+# using existing key in your tf machine
+# resource "aws_key_pair" "ashu-key-new" {
+#   key_name   = "ashunew-key"
+#   public_key = file("/home/ashu/.ssh/id_rsa.pub")
+# }
+
+# Define Algo 
+resource "tls_private_key" "ashu-algo" {
+  algorithm = "RSA"
+  rsa_bits  = 4096 # 2048 or 4096 
+}
+# creating key pair 
+resource "aws_key_pair" "ashu-key-gen" {
+  key_name   = "ashu-tf-key"
+  public_key = tls_private_key.ashu-algo.public_key_openssh 
+} 
+
+# storing private key in terraform machine 
+resource "local_file" "ssh_key" {
+  filename = "${aws_key_pair.ashu-key-gen.key_name}.pem"
+  content  = tls_private_key.ashu-algo.private_key_pem
+}
+
+```
+
+### use key pair 
+
+```
+# we can define multiple section of providers like aws , azure , git , docker
+resource "aws_instance" "ashu-vm1" {
+  ami           = var.my-ami
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.ashu-key-gen.key_name
+  tags = {
+    Name = "ashutoshh-linuxvm"
+  }
+}
+
+
+```
+
+
+
 
 
