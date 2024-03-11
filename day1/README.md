@@ -298,7 +298,7 @@ resource "aws_instance" "ashu-vm1" {
       user = "ec2-user"
       host = self.public_ip
       timeout = "3m"
-      private_key = file("/home/ashu/poc/ashu-terraform/ashu-tf-key.pem") 
+      private_key = tls_private_key.ashu-algo.private_key_pem
     }
 
 
