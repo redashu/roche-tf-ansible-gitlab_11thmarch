@@ -265,6 +265,49 @@ resource "aws_instance" "ashu-vm1" {
 
 ```
 
+## Introduction to provisioner 
+
+<img src="prov.png">
+
+### Remove provisioner Code with ec2
+
+```
+# we can define multiple section of providers like aws , azure , git , docker
+resource "aws_instance" "ashu-vm1" {
+  ami           = var.my-ami
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.ashu-key-gen.key_name
+  tags = {
+    Name = "ashutoshh-linuxvm"
+  }
+  # define provisioner here 
+    provisioner "remote-exec" {
+      inline = [ 
+        # write steps to install httpd server and host a static webpage 
+        "sudo yum update -y" ,
+        "sudo yum install httpd git -y" ,
+       " cd /tmp",
+       "git clone https://github.com/schoolofdevops/html-sample-app.git" ,
+        "sudo cp -rf html-sample-app/*  /var/www/html/",
+        "sudo systemctl enable --now httpd" 
+       ]
+    }
+    # we can define connection details here 
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = self.public_ip
+      timeout = "3m"
+      private_key = file("/home/ashu/poc/ashu-terraform/ashu-tf-key.pem") 
+    }
+
+
+}
+
+
+```
+
+
 
 
 
