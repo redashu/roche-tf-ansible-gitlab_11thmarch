@@ -307,6 +307,51 @@ resource "aws_instance" "ashu-vm1" {
 
 ```
 
+### verify provisioner task 
+
+### 
+
+```
+[ashu@ip-172-31-18-146 ashu-terraform]$ terraform output 
+ashu-vm-pub-ip = "44.203.164.172"
+```
+
+### 
+
+```
+chmod  400 ashu-tf-key.pem 
+```
+
+### 
+
+```
+ssh -i ashu-tf-key.pem ec2-user@44.203.164.172
+Last login: Mon Mar 11 11:00:21 2024 from 52.54.118.149
+   ,     #_
+   ~\_  ####_        Amazon Linux 2
+  ~~  \_#####\
+  ~~     \###|       AL2 End of Life is 2025-06-30.
+  ~~       \#/ ___
+   ~~       V~' '->
+    ~~~         /    A newer version of Amazon Linux is available!
+      ~~._.   _/
+         _/ _/       Amazon Linux 2023, GA and supported until 2028-03-15.
+       _/m/'           https://aws.amazon.com/linux/amazon-linux-2023/
+
+
+
+
+====>>
+
+[ec2-user@ip-172-31-83-15 ~]$ rpm -q httpd
+httpd-2.4.58-1.amzn2.x86_64
+[ec2-user@ip-172-31-83-15 ~]$ 
+[ec2-user@ip-172-31-83-15 ~]$ ls  /var/www/html/
+assets  elements.html  generic.html  html5up-phantom.zip  images  index.html  LICENSE.txt  README.txt
+[ec2-user@ip-172-31-83-15 ~]$ 
+
+```
+
 
 
 
