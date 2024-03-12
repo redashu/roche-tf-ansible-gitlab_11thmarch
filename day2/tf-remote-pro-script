@@ -1,0 +1,29 @@
+resource "aws_instance" "rp-vm1" {
+  ami           = var.ami
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.generated_key.key_name
+
+  tags = {
+    Name = "rp-linuxvm"
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"
+    private_key = file("./${aws_key_pair.generated_key.key_name}.pem")
+    host        = self.public_ip
+  }
+
+  # provisioner "file" {
+  #   source      = "scripts/web.sh"
+  #   destination = "/tmp/web.sh"
+  # }
+
+  provisioner "remote-exec" {
+    script = "./scripts/web.sh" # in local terraform machine location
+  #   inline = [
+	# # "chmod +x  /tmp/web.sh",
+	# "bash /tmp/web.sh"
+	# ]
+  # }
+}
