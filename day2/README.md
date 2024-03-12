@@ -90,3 +90,43 @@ Initializing provider plugins...
 
 Use terraform plan and apply 
 ```
+
+### multiple index with new names 
+
+
+```
+resource "aws_instance" "rp-vm1" {
+  ami           = var.ami
+  count = 2 
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.generated_key.key_name
+  vpc_security_group_ids = [aws_security_group.ashu-allow_tls.id]
+
+  tags = {
+    Name = "rp-linuxvm-${count.index + 1}" # adding machine names
+  }
+  user_data = data.template_file.ashu-user_data.rendered # calling cloud init
+
+  # connection {
+  #   type        = "ssh"
+  #   user        = "ec2-user"
+  #   private_key = file("./${aws_key_pair.generated_key.key_name}.pem")
+  #   host        = self.public_ip
+  # }
+
+  # provisioner "file" {
+  #   source      = "scripts/web.sh"
+  #   destination = "/tmp/web.sh"
+  # }
+
+  # provisioner "remote-exec" {
+  #   script = "./scripts/web.sh" # in local terraform machine location
+  #   inline = [
+	# # "chmod +x  /tmp/web.sh",
+	# "bash /tmp/web.sh"
+	# ]
+  # }
+}
+
+
+```
