@@ -38,5 +38,31 @@ ansible 2.9.23
 
 ```
 
+### ansible config directory 
 
+<img src="config1.png">
+
+
+### creating ansible inventory and config file 
+
+### inventory 
+
+```
+# this is ansible inventroy file 
+[ashu-nodes]
+192.168.1.10
+
+
+
+```
+
+### ansible.cfg 
+
+```
+[defaults]
+inventory      = ./hosts # location of inventory file 
+remote_port    = 22 # target host ssh port 
+sudo_user      = root # optional 
+remote_user    =  test # use by ansible to connect target hosts 
+```
 
