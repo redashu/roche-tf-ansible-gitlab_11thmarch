@@ -66,3 +66,45 @@ sudo_user      = root # optional
 remote_user    =  test # use by ansible to connect target hosts 
 ```
 
+### to make password less connection b/w ansible and target host use key based 
+
+```
+ashu@ip-172-31-18-146 ashu-ansible]$ ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ashu/.ssh/id_rsa): 
+/home/ashu/.ssh/id_rsa already exists.
+Overwrite (y/n)? y
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/ashu/.ssh/id_rsa.
+Your public key has been saved in /home/ashu/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:g84m4lUNjXJSJ+pSfuitgOnRb33AEjhSV6ASYs3W2A0 ashu@ip-172-31-18-146.ec2.internal
+The key's randomart image is:
++---[RSA 2048]----+
+|.oo +EB..        |
+|o .*.* *         |
+| .o.B + .        |
+| ..* * +         |
+|  o = * S        |
+| o.o B o .       |
+|o.o.+ B .        |
+```
+
+### transfer 
+
+```
+ssh-copy-id   test@192.168.1.10
+```
+
+### history 
+
+```
+  ansible  -i  hosts ashu-nodes  -u test -k  -m ping 
+  440  ssh-keygen 
+  441  ssh-copy-id   test@192.168.1.10
+  442  ssh  test@192.168.1.10 
+  443  ansible  -i  hosts ashu-nodes  -u test  -m ping 
+```
+
+
