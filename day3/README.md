@@ -268,4 +268,68 @@ PLAY RECAP *********************************************************************
       enabled: yes
 ```
 
+### calling external variable file 
+
+```
+[ashu@ip-172-31-18-146 ashu-ansible]$ tree 
+.
+├── ansible.cfg
+├── devhost
+├── docker-compose.yaml
+├── hosts
+├── playbooks
+│   └── install_soft.yaml
+├── variables
+│   └── myvar1.yml
+└── webapp
+    └── ashu.html
+
+3 directories, 7 files
+[ashu@ip-172-31-18-146 ashu-ansible]$ ls  variables/
+myvar1.yml
+[ashu@ip-172-31-18-146 ashu-ansible]$ cat  variables/myvar1.yml 
+---
+pkg: httpd
+my_user: ashu
+
+[ashu@ip-172-31-18-146 ashu-ansible]$ cat  playbooks/install_soft.yaml   | head 
+---
+- hosts: ashunodes # selecting group from inventory file 
+  remote_user: test
+  become: true # act like sudo for above user 
+  vars_files: # calling external varilable file 
+    - ../variables/myvar1.yml
+```
+
+### updated method 
+
+```
+---
+- hosts: ashunodes # selecting group from inventory file 
+  remote_user: test
+  become: true # act like sudo for above user 
+  vars_files: # calling external varilable file 
+    - ../variables/myvar1.yml
+  tasks: # here we will define modules to use 
+  - yum: 
+     name: git 
+     state: present # present | installed | lastest -- we can use 
+  - yum: 
+     name: "{{ pkg  }}" 
+     state: present 
+  - user:
+     name: "{{ my_user }}"
+     password: "{{ 'Hello@123' | password_hash('sha512') }}" # --- > /etc/shadow
+  - debug: 
+      msg: "hey user {{ my_user }} got created !!"
+  - copy:
+      src: ../webapp/ashu.html
+      dest: /var/www/html/index.html 
+  - service:
+      name: "{{ pkg }}"
+      state: started
+      enabled: yes
+```
+
+
 
