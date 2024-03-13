@@ -221,8 +221,51 @@ PLAY RECAP *********************************************************************
 
   - name: installing httpd software 
     yum: 
-     name: httpd 
+     name: httpd   
      state: absent # present | installed | lastest -- we can use 
 ```
 
-### 
+### we can 
+
+```
+ ansible-playbook -i hosts -K  playbooks/install_soft.yaml -C
+```
+
+### playbook with internal variable 
+
+```
+---
+- hosts: ashunodes # selecting group from inventory file 
+  remote_user: test
+  become: true # act like sudo for above user 
+  vars: # defining internal variable 
+    pkg: httpd 
+    my_user: ashu 
+  tasks: # here we will define modules to use 
+  - name: installing git software 
+    yum: 
+     name: git 
+     state: present # present | installed | lastest -- we can use 
+
+  - name: installing "{{ pkg }}" software 
+    yum: 
+     name: "{{ pkg }}"
+    # state: absent # present | installed | lastest -- we can use 
+  - name: creating user with password 
+    user:
+     name: "{{ my_user }}"
+     password: "{{ 'Hello@123' | password_hash('sha512') }}" # --- > /etc/shadow
+
+  - name: copy webapp to target servers
+    copy:
+      src: ../webapp/ashu.html
+      dest: /var/www/html/index.html 
+
+  - name: starting "{{ pkg }}" service 
+    service:
+      name: "{{ pkg }}"
+      state: started
+      enabled: yes
+```
+
+
