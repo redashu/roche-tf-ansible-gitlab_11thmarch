@@ -107,4 +107,122 @@ ssh-copy-id   test@192.168.1.10
   443  ansible  -i  hosts ashu-nodes  -u test  -m ping 
 ```
 
+### running ansible adhoc commands 
 
+```
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible -i devhost  all  -u test -m ping 
+192.168.1.10 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible -i devhost  all  -u test -m command -a  "date"
+192.168.1.10 | CHANGED | rc=0 >>
+Wed Mar 13 09:00:15 UTC 2024
+[ashu@ip-172-31-18-146 ashu-ansible]$ date
+Wed Mar 13 09:00:41 UTC 2024
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible -i devhost  all  -u test -m command -a  "whoami"
+192.168.1.10 | CHANGED | rc=0 >>
+test
+[ashu@ip-172-31-18-146 ashu-ansible]$ 
+
+```
+
+### listing modules in ansible machine 
+
+```
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible-doc  -l   |  wc  -l 
+3387
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible-doc  -l   |  grep  -i yum 
+yum                                                           Manages packages with the `yum' package manager                                       
+yum_repository                                                Add or remove YUM repositories                                                        
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible-doc  -l   |  grep  -i apt
+apt_repository                                                Add and remove APT repositories                                                       
+apt_key                                                       Add or remove an apt key                                                              
+skydive_capture                                               Module which manages flow capture on interfaces                                       
+apt_rpm                                                       apt_rpm package manager                                                               
+nios_naptr_record                                             Configure Infoblox NIOS NAPTR records                                                 
+na_ontap_qos_adaptive_policy_group                            NetApp ONTAP Adaptive Quality of Service policy group                                 
+vmware_vmkernel                                               Manages a VMware VMkernel Adapter of an ESXi host                                     
+apt                                                           Manages apt-packages                                                                  
+na_ontap_ucadapter                                            NetApp ONTAP UC adapter configuration                                                 
+apt_repo                                                      Manage APT repositories via apt-repo                                                  
+fortios_switch_controller_security_policy_captive_portal      Names of VLANs that use captive portal authentication in Fortinet's FortiOS and FortiG...
+vmware_guest_network                                          Manage network adapters of specified virtual machine in given vCenter infrastructure  
+[ashu@ip-172-31-18-146 ashu-ansible]$ 
+
+
+```
+
+### creating directory to make playbooks 
+
+```
+[ashu@ip-172-31-18-146 ashu-ansible]$ ls 
+ansible.cfg  devhost  docker-compose.yaml  hosts  playbooks
+[ashu@ip-172-31-18-146 ashu-ansible]$ tree 
+.
+├── ansible.cfg
+├── devhost
+├── docker-compose.yaml
+├── hosts
+└── playbooks
+    └── install_soft.yaml
+
+1 directory, 5 files
+```
+
+### RUnning playbook with sudo password access
+
+```
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible-playbook  -i  hosts -K playbooks/install_soft.yaml 
+BECOME password: 
+
+PLAY [ashunodes] ****************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************
+ok: [192.168.1.10]
+
+TASK [installing git software] **************************************************************************************************
+changed: [192.168.1.10]
+
+PLAY RECAP **********************************************************************************************************************
+192.168.1.10               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[ashu@ip-172-31-18-146 ashu-ansible]$ ansible-playbook  -i  hosts -K playbooks/install_soft.yaml 
+BECOME password: 
+
+PLAY [ashunodes] ****************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************
+ok: [192.168.1.10]
+
+TASK [installing git software] **************************************************************************************************
+ok: [192.168.1.10]
+
+PLAY RECAP **********************************************************************************************************************
+192.168.1.10               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+```
+
+### httpd and git 
+
+```
+---
+- hosts: ashunodes # selecting group from inventory file 
+  remote_user: test
+  become: true # act like sudo for above user 
+  tasks: # here we will define modules to use 
+  - name: installing git software 
+    yum: 
+     name: git 
+     state: present # present | installed | lastest -- we can use 
+
+  - name: installing httpd software 
+    yum: 
+     name: httpd 
+     state: absent # present | installed | lastest -- we can use 
+```
+
+### 
