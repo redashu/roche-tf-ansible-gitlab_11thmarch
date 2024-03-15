@@ -88,4 +88,32 @@ ashu-webapp  db  webhost
 
 ```
 
+### CI CD 
+
+<img src="gitl1.png">
+
+### GItlab projects
+
+<img src="proj.png">
+
+### upload public key to gitlab server  
+
+### we are cloning gitlab projecti in local machine 
+
+```
+git clone  git@gitlab.com:ashutoshh/ashu-roche.git
+Cloning into 'ashu-roche'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+[ashu@ip-172-31-18-146 poc]$ ls
+ashu-ansible  ashu-project  ashu-terraform  mys3                               tf-imports
+ashu-gitlab   ashu-roche    modules         roche-tf-ansible-gitlab_11thmarch  wc
+[ashu@ip-172-31-18-146 poc]$ 
+
+
+```
+
 
