@@ -59,3 +59,33 @@ Terraform will perform the following actions:
 
 <img src="rev.png">
 
+
+### ansible roles path setup
+
+## ansible.cfg
+
+```
+[defaults]
+remote_user = test 
+# default inventory location 
+inventory = ./hosts 
+roles_path = /home/ashu/poc/ashu-project/roles
+```
+
+### creating role using ansible-galaxy
+
+```
+ashu@ip-172-31-18-146 ashu-project]$ ls
+ansible.cfg  group_vars  hosts  host_vars  playbooks  roles  variables
+[ashu@ip-172-31-18-146 ashu-project]$ pwd
+/home/ashu/poc/ashu-project
+[ashu@ip-172-31-18-146 ashu-project]$ cd  roles/
+[ashu@ip-172-31-18-146 roles]$ ansible-galaxy init  ashu-webapp
+- Role ashu-webapp was created successfully
+[ashu@ip-172-31-18-146 roles]$ ls
+ashu-webapp  db  webhost
+[ashu@ip-172-31-18-146 roles]$ 
+
+```
+
+
