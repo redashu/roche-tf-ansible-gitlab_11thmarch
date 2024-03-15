@@ -116,4 +116,43 @@ ashu-gitlab   ashu-roche    modules         roche-tf-ansible-gitlab_11thmarch  w
 
 ```
 
+### jobs in gitlab 
+
+<img src="job.png">
+
+### servers in gitlab 
+
+<img src="srv.png">
+
+### workload and gitlb 
+
+<img src="workloads.png">
+
+### sample gitlab-ci yaml file with stage
+
+```
+# for defining stages 
+stages:
+  - ashu-stage1
+  - ashu-code2 
+
+# for defining jobs 
+ashu-job1:
+  stage: ashu-stage1  # calling stage 
+  script:
+    - echo "hello world"
+    - whoami
+    - cat /etc/os-release 
+    - uname -r 
+
+ashu-job2: 
+  stage: ashu-code2 # calling stage
+  script:
+    - echo "hello world now i will be running my shell script"
+    - bash run.sh 
+```
+
+### stages 
+
+<img src="stage1.png">
 
