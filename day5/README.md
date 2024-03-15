@@ -156,3 +156,178 @@ ashu-job2:
 
 <img src="stage1.png">
 
+### Installing custum gitlab runners
+
+```
+[root@ip-172-31-58-47 ~]# history 
+    1  yum install git -y
+    2  history 
+    3  amazon-linux-extras  install ansible2
+    4  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+    5  sudo yum -y install terraform
+    6  history 
+
+```
+
+### Installing gitlab runner 
+
+```
+rpm -ivh https://s3.dualstack.us-east-1.amazonaws.com/gitlab-runner-downloads/latest/rpm/gitlab-runner_amd64-fips.rpm 
+```
+
+### Register a new runner with shell executor 
+
+```
+[ec2-user@ip-172-31-58-47 ~]$ sudo  gitlab-runner   register 
+Runtime platform                                    arch=amd64 os=linux pid=3779 revision=782c6ecb version=16.9.1
+Running in system-mode.                            
+                                                   
+Enter the GitLab instance URL (for example, https://gitlab.com/):
+https://gitlab.com/
+Enter the registration token:
+GR13489414z_Ai4q7rdof98awsea3
+Enter a description for the runner:
+[ip-172-31-58-47.ec2.internal]: ashu-personal-runner
+Enter tags for the runner (comma-separated):
+ashu,aws,terraform,ansible
+Enter optional maintenance note for the runner:
+
+WARNING: Support for registration tokens and runner parameters in the 'register' command has been deprecated in GitLab Runner 15.6 and will be replaced with support for authentication tokens. For more information, see https://docs.gitlab.com/ee/ci/runners/new_creation_workflow 
+Registering runner... succeeded                     runner=GR13489414z_Ai4q7
+Enter an executor: shell, ssh, parallels, docker, docker-windows, docker+machine, docker-autoscaler, custom, virtualbox, kubernetes, instance:
+shell
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+ 
+Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml" 
+```
+
+### checking service of gitlab runner
+
+```
+[ec2-user@ip-172-31-58-47 ~]$ sudo systemctl status gitlab-runner.service 
+● gitlab-runner.service - GitLab Runner
+   Loaded: loaded (/etc/systemd/system/gitlab-runner.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2024-03-15 10:36:25 UTC; 21min ago
+ Main PID: 3756 (gitlab-runner)
+   CGroup: /system.slice/gitlab-runner.service
+           └─3756 /usr/bin/gitlab-runner run --working-directory /home/gitlab-runner --config /etc/gitlab-runner/config.to...
+
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Runtime platform                                    a...9.1
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Starting multi-runner from /etc/gitlab-runner/config....s=0
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Running in system-mode.                           
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: 
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Created missing unique system ID                    s...4ec
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Configuration loaded                                b...s=1
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: listen_address not defined, metrics & debug endpoints...s=1
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: [session_server].listen_address not defined, session ...s=1
+Mar 15 10:36:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Initializing executor providers                     b...s=1
+Mar 15 10:50:25 ip-172-31-58-47.ec2.internal gitlab-runner[3756]: Configuration loaded                                b...s=1
+Hint: Some lines were ellipsized, use -l to show in full.
+[ec2-user@ip-172-31-58-47 ~]$ sudo systemctl enable  gitlab-runner.service 
+[ec2-user@ip-172-31-58-47 ~]$ 
+
+```
+
+### more about gitlab runner options
+
+```
+[ec2-user@ip-172-31-58-47 ~]$ sudo gitlab-runner  verify 
+Runtime platform                                    arch=amd64 os=linux pid=3938 revision=782c6ecb version=16.9.1
+Running in system-mode.                            
+                                                   
+Verifying runner... is alive                        runner=fNd61fTC
+[ec2-user@ip-172-31-58-47 ~]$ sudo gitlab-runner  list
+Runtime platform                                    arch=amd64 os=linux pid=3945 revision=782c6ecb version=16.9.1
+Listing configured runners                          ConfigFile=/etc/gitlab-runner/config.toml
+ashu-personal-runner                                Executor=shell Token=fNd61fTCn3UZPVn5uvLG URL=https://gitlab.com/
+[ec2-user@ip-172-31-58-47 ~]$ 
+[ec2-user@ip-172-31-58-47 ~]$ 
+
+```
+
+### pipeline yaml file 
+
+```
+Primary navigation
+Homepage
+
+ Search or go to…
+Project
+A
+ashu-roche
+
+Pinned
+Issues
+0
+Merge requests
+0
+
+Manage
+
+Plan
+
+Code
+Merge requests
+0
+Repository
+Branches
+Commits
+Tags
+Repository graph
+Compare revisions
+Snippets
+
+Build
+
+Secure
+
+Deploy
+
+Operate
+
+Monitor
+
+Analyze
+
+Settings
+Delvex
+ashu-roche
+Repository
+You pushed to 
+dev
+ 1 minute ago
+ashu-roche
+.gitlab-ci.yml
+Delvex's avatar
+Update .gitlab-ci.yml file
+Delvex authored 1 minute ago
+226268bf
+.gitlab-ci.yml
+417 B
+# Define tags
+default:
+  tags:
+    - ashu
+    - aws
+# Define stages
+stages:
+  - ashu-stage1
+  - ashu-code2
+# Define jobs
+ashu-job1:
+  stage: ashu-stage1
+  script:
+    - echo "hello world"
+    - whoami
+    - cat /etc/os-release
+    - uname -r
+    - terraform --version
+    - ansible --version
+ashu-job2:
+  stage: ashu-code2
+  script:
+    - echo "hello world now I will be running my shell script"
+    - bash run.sh
+
+```
+
