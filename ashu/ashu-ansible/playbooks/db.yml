@@ -1,0 +1,27 @@
+---
+- name: Install MariaDB Server and set MySQL root password
+  hosts: 192.168.1.10
+  become: yes
+
+  tasks:
+    - name: Install MariaDB Server
+      yum:
+        name: mariadb-server
+        state: present
+      become: yes
+
+    - name: Start MariaDB service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+      become: yes
+
+    - name: Set MySQL root password
+      mysql_user:
+        name: root
+        password: Redhat@123
+        login_user: root
+        login_password: ''  # Empty password for the default login (no password)
+        host: localhost
+        update_password: always

@@ -1,0 +1,10 @@
+---
+# handlers file for ashu-webapp
+- name: restart_service
+  service:
+    name: "{{ pkg }}"
+    state: restarted 
+
+- name: check_sec_in_code
+  debug:
+    msg: "checking code quality by SonarCube"

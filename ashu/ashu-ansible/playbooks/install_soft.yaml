@@ -1,0 +1,35 @@
+---
+- hosts: web # selecting group from inventory file 
+  remote_user: test
+  become: true # act like sudo for above user 
+  vars_files: # calling external varilable file 
+    - ../variables/myvar1.yml
+  tasks: # here we will define modules to use 
+  - name: installing git software 
+    yum: 
+     name: git 
+     state: present # present | installed | lastest -- we can use 
+
+  - name: installing "{{ pkg }}" software 
+    yum: 
+     name: "{{ pkg }}"
+    # state: absent # present | installed | lastest -- we can use 
+  - name: creating user with password 
+    user:
+     name: "{{ my_user }}"
+     password: "{{ 'Hello@123' | password_hash('sha512') }}" # --- > /etc/shadow
+
+  - name: priting values 
+    debug: 
+      msg: "hey user {{ my_user }} got created !!"
+
+  - name: copy webapp to target servers
+    copy:
+      src: ../webapp/ashu.html
+      dest: /var/www/html/index.html 
+
+  - name: starting "{{ pkg }}" service 
+    service:
+      name: "{{ pkg }}"
+      state: started
+      enabled: yes

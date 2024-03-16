@@ -1,0 +1,45 @@
+# Define tags
+default:
+  tags:
+    - ashu
+    - aws
+
+# Define stages
+stages:
+  - ashu-stage1
+  - ashu-code2
+
+# Define jobs
+ashu-job1:
+  stage: ashu-stage1
+  script:
+    - echo "hello world"
+    - whoami
+    - cat /etc/os-release
+    - uname -r
+    - terraform --version
+    - cd  ~/wc 
+    - terraform init 
+    - terraform plan 
+    - terraform apply --auto-approve 
+
+ashu-job2:
+  stage: ashu-code2
+  script:
+    - echo "hello world now I will be running my shell script"
+    - bash run.sh
+    - ls ~/ 
+    - git branch -a 
+    - ls  -a  
+    - chmod 400 ~/wc/ashu-keynew123.pem 
+    - cd ashu-project 
+    - ansible -i ~/public.txt web -m ping --private-key ~/wc/ashu-keynew123.pem
+    - echo "running playbook now"
+    - ansible-playbook -i ~/public.txt --private-key ~/wc/ashu-keynew123.pem playbooks/use_roles-playbook.yml
+
+ashu-job3: 
+  stage: .post 
+  script:
+    - cd  ~/wc 
+    - terraform destroy --auto-approve 
+

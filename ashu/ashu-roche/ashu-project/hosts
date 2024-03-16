@@ -1,0 +1,16 @@
+# web app server group 
+[webapp]
+192.168.1.10
+192.168.1.11
+
+# database server group 
+[dbserver]
+192.168.1.12 
+
+# calling groups
+[patch:children]
+webapp
+dbserver
+
+[xyz]
+192.168.1.[10:12]

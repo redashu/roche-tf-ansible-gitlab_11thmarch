@@ -1,0 +1,18 @@
+---
+- hosts: web
+  become: true 
+  roles: 
+  - ashu-webapp 
+  tasks: 
+  - name: check current username on target
+    command: whoami 
+    register:  x
+    #ignore_errors: yes
+
+  - name: printing 
+    debug: 
+      #msg: "hello my ouput is {{ x  }}"
+      var: x 
+  - name: parsing output values
+    debug:
+      msg: "my remote user name is {{ x.stdout  }}"

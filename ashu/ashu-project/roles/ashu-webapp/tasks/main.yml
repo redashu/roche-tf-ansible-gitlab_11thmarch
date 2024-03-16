@@ -1,0 +1,29 @@
+---
+# tasks file for ashu-webapp
+- name: loop variables
+  debug:
+    msg: "{{ item }} vales from variable "
+  loop: "{{ test }}"
+
+- name: running date command 
+  command: date 
+
+- name: install "{{ pkg }}"
+  yum:
+    name: "{{ pkg }}"
+    state: present 
+
+- name: copy webpage 
+  copy:
+    src: roche.html 
+    dest: /var/www/html/index.html 
+    mode: 0644
+  notify: 
+  - restart_service
+  - check_sec_in_code
+
+- name: starting "{{ pkg }}" service
+  service:
+    name: "{{ pkg }}"
+    state: started 
+    enabled: yes 

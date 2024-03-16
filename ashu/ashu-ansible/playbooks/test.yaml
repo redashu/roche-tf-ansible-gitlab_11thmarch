@@ -1,0 +1,13 @@
+---
+- hosts: all
+  vars_files:
+  - ../variables/test_var.yml
+  tasks:
+  - name: calling variables 
+    debug:
+      msg:
+      - "hello checking values of {{ x  }}"
+      - "hey {{ y }} How you doing"
+  - name: Installing {{ soft  }} in all the servers
+    debug:
+      msg: "Installing {{ soft  }} in {{ ansible_hostname }}"

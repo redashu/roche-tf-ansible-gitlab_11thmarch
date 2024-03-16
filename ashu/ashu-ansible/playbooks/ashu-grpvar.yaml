@@ -1,0 +1,14 @@
+---
+- hosts: all
+  
+  tasks:
+  - name: calling variables
+    debug: 
+      msg: 
+      - "hey world"
+      - "Installing software {{ mypatch  }}"
+
+  - name: install {{ mypatch }}
+    yum: 
+      name: "{{ mypatch }}"
+      state: absent 

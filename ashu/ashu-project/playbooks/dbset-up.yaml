@@ -1,0 +1,44 @@
+---
+- hosts: patch
+  become: true 
+  vars_files:
+  - ../variables/db-pass.yaml
+  tasks:
+  - name: Installing java in all the system 
+    yum:
+      name: "{{ javaupdates }}"
+      state: present 
+    tags:
+    - install_java
+
+  - name: create multiple users in patch group hosts 
+    user: 
+      name: "{{ item }}"
+      state: present
+    loop: "{{ usernames }}" # for -- > with_items -- loop
+
+  - name: implementing block for db setup 
+    block:
+    - name: installing db software
+      yum:
+        name: "{{ item }}" 
+        state: present
+      loop: "{{ dbsoft }}"
+
+    - name: starting mariadb service 
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+    - name: setting root/admin password of database server
+      mysql_user:
+        name: root
+        password: "{{ db_password }}"
+        login_user: root
+        login_password: "{{ db_password }}"  # Empty password for the default login (no password)
+        host: localhost
+        update_password: always
+
+    when: ansible_hostname  == 'ashunode3'  
+
+   

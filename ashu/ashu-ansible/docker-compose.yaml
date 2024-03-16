@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  centosnode:
+    image: mdhack/ansible:main
+    container_name: ${CONTAINER_NAME}
+    hostname: ${CONTAINER_NAME}
+    networks:
+      my_network:
+        ipv4_address: ${CONTAINER_IP}
+    environment:
+      - CONTAINER_INDEX=${CONTAINER_INDEX}
+    #command: tail -f /dev/null
+    tty: true
+    privileged: true
+
+  centosnode1:
+    image: mdhack/ansible:main
+    container_name: ${CONTAINER_NAME1}
+    hostname: ${CONTAINER_NAME1}
+    networks:
+      my_network:
+        ipv4_address: ${CONTAINER_IP1}
+    environment:
+      - CONTAINER_INDEX1=${CONTAINER_INDEX1}
+    #command: tail -f /dev/null
+    tty: true
+    privileged: true
+    
+  centosnode2:
+    image: mdhack/ansible:main
+    container_name: ${CONTAINER_NAME2}
+    hostname: ${CONTAINER_NAME2}
+    networks:
+      my_network:
+        ipv4_address: ${CONTAINER_IP2}
+    environment:
+      - CONTAINER_INDEX2=${CONTAINER_INDEX2}
+    #command: tail -f /dev/null
+    tty: true
+    privileged: true
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET_CIDR}

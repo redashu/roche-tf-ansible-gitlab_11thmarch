@@ -1,0 +1,6 @@
+---
+# handlers file for webhost
+- name: restart_httpd
+  service:
+    name: "{{ pkg }}"
+    state: restarted 

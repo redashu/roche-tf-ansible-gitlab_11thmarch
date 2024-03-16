@@ -1,0 +1,7 @@
+---
+# defaults file for ashu-webapp
+# only define variables here which you are going to in tasks
+pkg: httpd 
+test:
+  - hello
+  - jack 
